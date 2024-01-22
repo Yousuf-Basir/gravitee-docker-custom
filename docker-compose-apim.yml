@@ -106,11 +106,11 @@ services:
     depends_on:
       - management_api
     environment:
-      - MGMT_API_URL=http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/
+      - MGMT_API_URL=http://${ADDRESS}:8083/management/organizations/DEFAULT/environments/DEFAULT/
     networks:
       - frontend
-    volumes:
-      - ./apim-management-ui/logs:/var/log/nginx
+    # volumes:
+    #   - ./apim-management-ui/logs:/var/log/nginx
 
   portal_ui:
     image: graviteeio/apim-portal-ui:${APIM_VERSION:-4}
@@ -121,8 +121,8 @@ services:
     depends_on:
       - management_api
     environment:
-      - PORTAL_API_URL=http://localhost:8083/portal/environments/DEFAULT
+      - PORTAL_API_URL=http://${ADDRESS}:8083/portal/environments/DEFAULT
     networks:
       - frontend
-    volumes:
-      - ./apim-portal-ui/logs:/var/log/nginx
+    # volumes:
+    #   - ./apim-portal-ui/logs:/var/log/nginx
