@@ -21,9 +21,6 @@ networks:
   storage:
     name: storage
 
-volumes:
-  data-elasticsearch:
-  data-mongo:
 
 services:
   mongodb:
@@ -31,7 +28,7 @@ services:
     container_name: gio_apim_mongodb
     restart: always
     volumes:
-      - data-mongo:/data/db
+      - ./mongodb/data:/data/db
     networks:
       - storage
 
@@ -40,7 +37,7 @@ services:
     container_name: gio_apim_elasticsearch
     restart: always
     volumes:
-      - data-elasticsearch:/usr/share/elasticsearch/data
+      - ./elasticsearch/data:/var/lib/elasticsearch/data
     environment:
       - http.host=0.0.0.0
       - transport.host=0.0.0.0
@@ -70,9 +67,14 @@ services:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_ratelimit_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_reporters_elasticsearch_endpoints_0=http://elasticsearch:9200
+      - gravitee_plugins_path_0=/opt/graviteeio-gateway/plugins
+      - gravitee_plugins_path_1=/opt/graviteeio-gateway/plugins-ext
     networks:
       - storage
       - frontend
+    volumes:
+      - ./apim-gateway/logs:/opt/graviteeio-gateway/logs
+      - ./apim-gateway/plugins:/opt/graviteeio-gateway/plugins-ext
 
   management_api:
     image: graviteeio/apim-management-api:${APIM_VERSION:-4}
@@ -80,18 +82,20 @@ services:
     restart: always
     ports:
       - "8083:8083"
-    links:
-      - mongodb
-      - elasticsearch
     depends_on:
       - mongodb
       - elasticsearch
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch:9200
+      - gravitee_plugins_path_0=/opt/graviteeio-management-api/plugins
+      - gravitee_plugins_path_1=/opt/graviteeio-management-api/plugins-ext
     networks:
       - storage
       - frontend
+    volumes:
+      - ./apim-management-api/logs:/opt/graviteeio-management-api/logs
+      - ./apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
 
   management_ui:
     image: graviteeio/apim-management-ui:${APIM_VERSION:-4}
@@ -105,6 +109,8 @@ services:
       - MGMT_API_URL=http://localhost:8083/management/organizations/DEFAULT/environments/DEFAULT/
     networks:
       - frontend
+    volumes:
+      - ./apim-management-ui/logs:/var/log/nginx
 
   portal_ui:
     image: graviteeio/apim-portal-ui:${APIM_VERSION:-4}
@@ -118,3 +124,5 @@ services:
       - PORTAL_API_URL=http://localhost:8083/portal/environments/DEFAULT
     networks:
       - frontend
+    volumes:
+      - ./apim-portal-ui/logs:/var/log/nginx
