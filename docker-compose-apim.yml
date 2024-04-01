@@ -73,7 +73,7 @@ services:
       - storage
       - frontend
     volumes:
-      - ./apim-gateway/logs:/opt/graviteeio-gateway/logs
+      # - ./apim-gateway/logs:/opt/graviteeio-gateway/logs
       - ./apim-gateway/plugins:/opt/graviteeio-gateway/plugins-ext
 
   management_api:
@@ -94,7 +94,7 @@ services:
       - storage
       - frontend
     volumes:
-      - ./apim-management-api/logs:/opt/graviteeio-management-api/logs
+      # - ./apim-management-api/logs:/opt/graviteeio-management-api/logs
       - ./apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
 
   management_ui:
