@@ -109,8 +109,8 @@ services:
       - MGMT_API_URL=http://${ADDRESS}:8083/management/organizations/DEFAULT/environments/DEFAULT/
     networks:
       - frontend
-    volumes:
-      - ./apim-management-ui/logs:/var/log/nginx
+    # volumes:
+    #   - ./apim-management-ui/logs:/var/log/nginx
 
   portal_ui:
     image: graviteeio/apim-portal-ui:${APIM_VERSION:-4}
@@ -124,5 +124,5 @@ services:
       - PORTAL_API_URL=http://${ADDRESS}:8083/portal/environments/DEFAULT
     networks:
       - frontend
-    volumes:
-      - ./apim-portal-ui/logs:/var/log/nginx
+    # volumes:
+    #   - ./apim-portal-ui/logs:/var/log/nginx
