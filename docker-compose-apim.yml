@@ -74,7 +74,7 @@ services:
       - frontend
     volumes:
       - ./apim-gateway/logs:/opt/graviteeio-gateway/logs
-      - ./apim-gateway/plugins:/opt/graviteeio-gateway/plugins-ext
+      - ./apim-gateway/plugins:/opt/graviteeio-gateway/plugins-ext:ro:rw
 
   management_api:
     image: graviteeio/apim-management-api:${APIM_VERSION:-4}
@@ -95,7 +95,7 @@ services:
       - frontend
     volumes:
       - ./apim-management-api/logs:/opt/graviteeio-management-api/logs
-      - ./apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext
+      - ./apim-management-api/plugins:/opt/graviteeio-management-api/plugins-ext:ro:rw
 
   management_ui:
     image: graviteeio/apim-management-ui:${APIM_VERSION:-4}
